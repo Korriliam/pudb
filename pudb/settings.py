@@ -58,8 +58,8 @@ def get_save_config_path(*resource):
 
     assert not resource.startswith("/")
     path = os.path.join(XDG_CONFIG_HOME, resource)
-    if not os.path.isdir(path):
-        os.makedirs(path, 448)  # 0o700
+    # if not os.path.isdir(path):
+    # os.makedirs(path, 448)  # 0o700
     return path
 
 # end LGPL violation
@@ -96,10 +96,10 @@ def load_config():
     except Exception:
         settings_log.exception("Failed to load config")
 
-    conf_dict.setdefault("shell", "internal")
-    conf_dict.setdefault("theme", "classic")
-    conf_dict.setdefault("line_numbers", "False")
-    conf_dict.setdefault("seen_welcome", "a")
+    conf_dict.setdefault("shell", "ptipython")
+    conf_dict.setdefault("theme", "agr-256")
+    conf_dict.setdefault("line_numbers", "true")
+    conf_dict.setdefault("seen_welcome", "e064")
 
     conf_dict.setdefault("sidebar_width", 0.5)
     conf_dict.setdefault("variables_weight", 1)
@@ -142,6 +142,7 @@ def load_config():
 
 
 def save_config(conf_dict):
+    return
     from os.path import join
 
     cparser = ConfigParser()
@@ -574,44 +575,14 @@ def load_breakpoints():
     Loads and check saved breakpoints out from files
     Returns: list of tuples
     """
-    from os.path import join, isdir
-
-    file_names = []
-    for cdir in XDG_CONFIG_DIRS:
-        if isdir(cdir):
-            for name in [SAVED_BREAKPOINTS_FILE_NAME, BREAKPOINTS_FILE_NAME]:
-                file_names.append(join(cdir, XDG_CONF_RESOURCE, name))
-
-    lines = []
-    for fname in file_names:
-        try:
-            rc_file = open(fname)
-        except OSError:
-            pass
-        else:
-            lines.extend([line.strip() for line in rc_file.readlines()])
-            rc_file.close()
-
-    return parse_breakpoints(lines)
+    return []
 
 
 def save_breakpoints(bp_list):
     """
     :arg bp_list: a list of `bdb.Breakpoint` objects
     """
-    save_path = get_breakpoints_file_name()
-    if not save_path:
-        return
-
-    histfile = open(get_breakpoints_file_name(), "w")
-    bp_list = {(bp.file, bp.line, bp.cond) for bp in bp_list}
-    for bp in bp_list:
-        line = "b %s:%d" % (bp[0], bp[1])
-        if bp[2]:
-            line += ", %s" % bp[2]
-        line += "\n"
-        histfile.write(line)
-    histfile.close()
+    pass
 
 # }}}
 
